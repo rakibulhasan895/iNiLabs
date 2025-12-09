@@ -44,6 +44,8 @@ class ProductDatabaseSeder extends Seeder
 
         foreach ($products as $product) {
             $product['user_id'] = $users->random()->id;
+            $product['created_at'] = now();
+            $product['updated_at'] = now();
             DB::table('products')->insert($product);
         }
 
