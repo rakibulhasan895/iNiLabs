@@ -1,30 +1,44 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <nav class="navbar" v-if="auth.token" >
+      <router-link v-if="auth.token" to="/products">Products</router-link>
+      <router-link v-if="auth.token" to="/products/create">New Product</router-link>
+      <button v-if="auth.token" @click="logout">Logout</button>
+    </nav>
+    <router-view />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
+<script setup>
+import { useAuthStore } from './stores/auth';
+import { useRouter } from 'vue-router';
+
+const auth = useAuthStore();
+const router = useRouter();
+
+const logout = () => {
+  auth.logout();
+  router.push('/');
+};
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.navbar {
+  display: flex;
+  gap: 1rem;
+  background-color: #42b983;
+  padding: 1rem;
+  color: white;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.navbar a {
+  color: white;
+  text-decoration: none;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.navbar button {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
 }
 </style>
